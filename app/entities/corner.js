@@ -1,0 +1,1 @@
+class Corner extends Object2D {}
