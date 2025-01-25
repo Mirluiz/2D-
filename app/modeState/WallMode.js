@@ -13,15 +13,19 @@ class WallMode extends Mode {
     const x = event.clientX - rect.left; 
     const y = event.clientY - rect.top;
 
-    if(this.active) {
-      this.active = null;
-    } 
+    
 
     const snap = this.checkForSnap(x, y);
     const newWall = new Wall() 
+
+    if(this.active) {
+      if(snap && snap.connection)this.active.end.connection = snap.connection;
+      this.active = null;
+    } 
      
     if(snap) {  
       newWall.start.position = {x: snap.x, y: snap.y};
+      newWall.start.connection = snap.connection;
       newWall.end.position = {x: snap.x, y: snap.y};  
     } else { 
       newWall.start.position = {x, y};
@@ -49,7 +53,9 @@ class WallMode extends Mode {
   }
 
   onKeyDown(event) {
-    // 
+    if(event.code === 'Escape') {
+      this.active = null;
+    }
   }
 
   checkForSnap(x, y) {
@@ -65,9 +71,9 @@ class WallMode extends Mode {
       const distanceToEnd = Vector.distance(wall.end.position, vec);
 
       if(distanceToStart < 16) {
-          ret = {x: wall.start.position.x, y: wall.start.position.y};
+          ret = {x: wall.start.position.x, y: wall.start.position.y, connection: wall.start};
       } else if (distanceToEnd < 16) {
-          ret = {x: wall.end.position.x, y: wall.end.position.y};
+          ret = {x: wall.end.position.x, y: wall.end.position.y, connection: wall.end};
       } else {
         if(Math.abs(wall.start.position.x - x) < 8) {
           ret = {x: wall.start.position.x, y}
@@ -85,8 +91,6 @@ class WallMode extends Mode {
           ret = {x, y: wall.end.position.y}
         }
       }
-
-      
     });
 
     return ret;

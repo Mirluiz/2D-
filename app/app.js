@@ -25,6 +25,10 @@ class App {
     this.html.addEventListener('mousemove', (event) => {
       this.modeManager.currentMode.onMove(event);
     })
+
+    window.addEventListener('keydown', (event) => {
+      this.modeManager.currentMode.onKeyDown(event);
+    })
   }
 
   run(){

@@ -15,6 +15,7 @@ class ModeManager {
   }
 
   onKeyDown(event) {
+    console.log('===')
     this.currentMode.onKeyDown(event);
   }
 }

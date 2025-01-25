@@ -1,6 +1,8 @@
 class WallEnd extends Object2D {
   fillColor = 'green'
 
+  connection // Object2D
+
   draw(ctx) {
     ctx.save();
 
