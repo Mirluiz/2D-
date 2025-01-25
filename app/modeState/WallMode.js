@@ -71,11 +71,17 @@ class WallMode extends Mode {
       } else {
         if(Math.abs(wall.start.position.x - x) < 8) {
           ret = {x: wall.start.position.x, y}
-        }  else if (Math.abs(wall.start.position.y - y) < 8){
+        } 
+        
+        if (Math.abs(wall.start.position.y - y) < 8){
           ret = {x, y: wall.start.position.y} 
-        } else  if(Math.abs(wall.end.position.x -  x) < 8) {
+        }
+        
+        if(Math.abs(wall.end.position.x -  x) < 8) {
           ret = {x: wall.end.position.x, y}
-        }  else if (Math.abs(wall.end.position.y - y) < 8){
+        }
+        
+        if (Math.abs(wall.end.position.y - y) < 8){
           ret = {x, y: wall.end.position.y}
         }
       }
