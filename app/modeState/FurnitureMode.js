@@ -1,0 +1,4 @@
+class FurnutireMode extends Mode{
+  
+}
+ 

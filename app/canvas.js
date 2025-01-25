@@ -17,28 +17,12 @@ class Canvas {
     this.height = window.innerHeight;    
   }
 
-  drawWall() {
-    this.walls.forEach(() => {
-      // wall
-    })
-  }
-
-  drawCorner() {
-    this.corners.forEach(() => {
-      // corner
-    })
-  }
-
-  drawFurniture() {
-    this.furnites.forEach(() => {
-      // furnitures
-    })
-  }
 
   draw() {
-    this.drawWall();
-    this.drawCorner();
-    this.drawFurniture();
+    [...this.walls, ...this.corners,...this.furnites].forEach((obj) => {
+      obj.draw(this.ctx);
+       
+    })
   }
 
   animate() {
