@@ -41,12 +41,12 @@ class App {
       ret.push(newWall);
     }
 
-    {
-      const newWall = new Wall();
-      newWall.start.position = {x: 10, y: 10};
-      newWall.end.position = {x: 50, y: 50};
-      ret.push(newWall);
-    }
+    // {
+    //   const newWall = new Wall();
+    //   newWall.start.position = {x: 10, y: 10};
+    //   newWall.end.position = {x: 50, y: 50};
+    //   ret.push(newWall);
+    // }
 
 
     return ret
