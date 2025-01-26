@@ -8,7 +8,7 @@ class Graph {
 
     for (const neighbor of neighbors) {
       if (!visited[neighbor.uuid]) {
-        if (this.dfs(neighbor, visited, start)) {
+        if (this.dfs(neighbor, visited, node)) {
           return true;
         }
       } else if (start.uuid !== neighbor.uuid) {
@@ -16,7 +16,7 @@ class Graph {
       }
     }
 
-    return false; // No cycle detected from this node
+    return false;
   }
 
   getNeighbours(node) {
@@ -24,6 +24,9 @@ class Graph {
   }
 
   update(walls, corners) {
+    this.nodes = [];
+    this.edges = {};
+
     corners?.forEach((corner) => {
       this.addNode(corner);
 

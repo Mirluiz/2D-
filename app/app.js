@@ -3,6 +3,7 @@ class App {
   html;
   modeManager = new ModeManager();
   ui_mode; // black / white
+  graph = new Graph();
 
   constructor(htmlCanvas) {
     this.html = htmlCanvas;
@@ -13,13 +14,17 @@ class App {
       this.canvas.walls.push(n);
     });
 
-    this.modeManager.setMode(new WallMode(this.canvas));
+    this.modeManager.setMode(new WallMode(this.canvas, this.graph));
     this.initListenes();
   }
 
   initListenes() {
     this.html.addEventListener("click", (event) => {
       this.modeManager.currentMode.onClick(event);
+
+      if (this.canvas.roomDetected) {
+        this.modeManager.setMode(new FurnitureMode(this.canvas, this.graph));
+      }
     });
 
     this.html.addEventListener("mousemove", (event) => {
@@ -38,12 +43,12 @@ class App {
   generateWalls() {
     const ret = [];
 
-    {
-      const newWall = new Wall();
-      newWall.start = { x: 100, y: 100 };
-      newWall.end = { x: 300, y: 100 };
-      ret.push(newWall);
-    }
+    // {
+    //   const newWall = new Wall();
+    //   newWall.start = { x: 100, y: 100 };
+    //   newWall.end = { x: 300, y: 100 };
+    //   ret.push(newWall);
+    // }
 
     // {
     //   const newWall = new Wall();

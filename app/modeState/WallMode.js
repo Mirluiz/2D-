@@ -1,11 +1,11 @@
 class WallMode extends Mode {
   canvas;
   active;
-  graph = new Graph();
+  graph;
 
-  constructor(canvas) {
+  constructor(canvas, graph) {
     super();
-
+    this.graph = graph;
     this.canvas = canvas;
   }
 
@@ -19,11 +19,6 @@ class WallMode extends Mode {
 
     if (this.active) {
       if (snap && snap.connection) {
-        console.log(
-          "snap.connection instanceof Corner",
-          snap.connection instanceof Corner,
-          snap.connection
-        );
         if (snap.connection instanceof Corner) {
           this.active.endConnection = snap.connection;
         } else {
@@ -63,7 +58,8 @@ class WallMode extends Mode {
       room.forEach((cornerUUID) => {
         const corner = this.canvas.corners.find((c) => c.uuid === cornerUUID);
         if (corner) newRoom.corners.push(corner);
-        // console.log("new room", newRoom);
+        this.canvas.roomDetected = true;
+        this.canvas.walls.pop();
         this.canvas.rooms.push(newRoom);
       });
     }
@@ -111,6 +107,39 @@ class WallMode extends Mode {
       return ret;
     }
 
+    ret = this.checkForWallEnd(x, y);
+
+    this.canvas.walls.forEach((wall) => {
+      if (wall.uuid === this.active?.uuid || ret) {
+        return;
+      }
+
+      {
+        if (Math.abs(wall.start.x - x) < 8) {
+          ret = { x: wall.start.x, y };
+        }
+
+        if (Math.abs(wall.start.y - y) < 8) {
+          ret = { x, y: wall.start.y };
+        }
+
+        if (Math.abs(wall.end.x - x) < 8) {
+          ret = { x: wall.end.x, y };
+        }
+
+        if (Math.abs(wall.end.y - y) < 8) {
+          ret = { x, y: wall.end.y };
+        }
+      }
+    });
+
+    return ret;
+  }
+
+  checkForWallEnd(x, y) {
+    let ret = null;
+    const vec = { x, y };
+
     this.canvas.walls.forEach((wall) => {
       if (wall.uuid === this.active?.uuid || ret) {
         return;
@@ -133,22 +162,6 @@ class WallMode extends Mode {
           connection: wall,
           end: "end",
         };
-      } else {
-        if (Math.abs(wall.start.x - x) < 8) {
-          ret = { x: wall.start.x, y };
-        }
-
-        if (Math.abs(wall.start.y - y) < 8) {
-          ret = { x, y: wall.start.y };
-        }
-
-        if (Math.abs(wall.end.x - x) < 8) {
-          ret = { x: wall.end.x, y };
-        }
-
-        if (Math.abs(wall.end.y - y) < 8) {
-          ret = { x, y: wall.end.y };
-        }
       }
     });
 
