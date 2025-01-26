@@ -19,7 +19,7 @@ class WallMode extends Mode {
 
     if (this.active) {
       if (snap && snap.connection)
-        this.active.end.connections.push(snap.connection);
+        this.active.end.connections?.push(snap.connection);
       this.active = null;
     }
 
@@ -109,6 +109,6 @@ class WallMode extends Mode {
     this.graph.update(this.canvas.walls);
     const hasCycle = this.graph.hasCycle();
 
-    return hasCycle();
+    return hasCycle;
   }
 }
