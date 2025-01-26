@@ -9,6 +9,7 @@
     <script src="./app/math/Vector.js"></script>
     <script src="./app/entities/Object2D.js"></script>
     <script src="./app/entities/Wall.js"></script>
+    <script src="./app/entities/Room.js"></script>
 
     <script src="./app/modeState/Mode.js"></script>
     <script src="./app/modeState/WallMode.js"></script>
@@ -22,12 +23,18 @@
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <canvas
-      id="canvas"
-      width="1000"
-      height="800"
-      style="border: 1px solid black"
-    ></canvas>
+    <div style="display: flex">
+      <canvas
+        id="canvas"
+        width="1000"
+        height="800"
+        style="border: 1px solid black"
+      ></canvas>
+      <div>
+        #corner count
+        <snap id="corner_count">0</snap>
+      </div>
+    </div>
     <script src="index.js"></script>
   </body>
 </html>

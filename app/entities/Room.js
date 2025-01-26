@@ -1,17 +1,17 @@
 class Room extends Object2D {
   corners = [];
 
-  draw() {
+  draw(ctx) {
     ctx.beginPath();
 
-    ctx.moveTo(this.corners[0].x, this.corners[0].y);
+    ctx.moveTo(this.corners[0].position.x, this.corners[0].position.y);
 
-    this.corners.forEach((corner) => {
-      ctx.lineTo(corner.x, corner.end.y);
+    this.corners?.forEach((corner) => {
+      ctx.lineTo(corner.position.x, corner.position.y);
     });
 
     ctx.closePath();
-    ctx.fillStyle = "rgba(100, 150, 250, 0.5)";
+    ctx.fillStyle = "#d3d3d3";
     ctx.fill();
     ctx.strokeStyle = "black";
     ctx.stroke();

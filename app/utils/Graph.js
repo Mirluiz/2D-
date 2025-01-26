@@ -1,38 +1,45 @@
 class Graph {
-  nodes = [];
-  edges = {};
+  nodes = []; // Corner[]
+  edges = {}; // [key in string: Corner]
 
-  dfs(node, visited = {}) {
+  dfs(node, visited = {}, start) {
     const neighbors = this.getNeighbours(node);
+    visited[node.uuid] = true;
 
     for (const neighbor of neighbors) {
       if (!visited[neighbor.uuid]) {
-        this.dfs(neighbor, visited);
+        if (this.dfs(neighbor, visited, start)) {
+          return true;
+        }
+      } else if (start.uuid !== neighbor.uuid) {
+        return true;
       }
     }
+
+    return false; // No cycle detected from this node
   }
 
   getNeighbours(node) {
-    return this.edges[node.uuid];
+    return this.edges[node.uuid] ?? [];
   }
 
   update(walls, corners) {
-    corners.forEach((corner) => {
+    corners?.forEach((corner) => {
       this.addNode(corner);
 
-      walls.forEach((wall) => {
-        const isStart = wall.startConnection.uuid === corner.uuid;
-        const isEnd = wall.endConnection.uuid === corner.uuid;
+      walls?.forEach((wall) => {
+        const isStart = wall.startConnection?.uuid === corner.uuid;
+        const isEnd = wall.endConnection?.uuid === corner.uuid;
 
         if (isStart) {
           const neighborCorner = corners.find(
-            (c) => c.uuid === wall.startConnection.uuid
+            (c) => c.uuid === wall.endConnection?.uuid
           );
 
           if (neighborCorner) this.addEdge(corner, neighborCorner);
         } else if (isEnd) {
           const neighborCorner = corners.find(
-            (c) => c.uuid === wall.endConnection.uuid
+            (c) => c.uuid === wall.startConnection?.uuid
           );
 
           if (neighborCorner) this.addEdge(corner, neighborCorner);
@@ -53,7 +60,18 @@ class Graph {
     this.edges[vertex.uuid].push(adjusted);
   }
 
-  hasCycle() {
-    return false;
+  getCycle(corners) {
+    if (corners.length === 0) {
+      return false;
+    }
+
+    const visited = {};
+    const hasCycle = this.dfs(corners[0], visited, corners[0]);
+
+    if (hasCycle) {
+      return Object.keys(visited);
+    } else {
+      return false;
+    }
   }
 }
