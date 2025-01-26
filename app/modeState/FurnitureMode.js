@@ -17,16 +17,26 @@ class FurnitureMode extends Mode {
     const wallSnap = this.getWallSnap(x, y);
 
     if (wallSnap) {
-      console.log("snapping");
+      const { position, wall } = wallSnap;
+      this.canvas.sofa.position = { ...position };
+      const origin = {
+        x: wall.start.x - wall.end.x,
+        y: wall.start.y - wall.end.y,
+      };
+
+      const angle = Math.atan2(origin.y, origin.x);
+      this.canvas.sofa.rotation = angle;
     } else {
       this.canvas.sofa.position = { x, y };
-      this.canvas.sofa.rotation = {};
+      this.canvas.sofa.rotation = 0;
     }
   }
 
   getWallSnap(x, y) {
     const vec = { x, y };
     let lowestDistance = Infinity;
+    let pos = { x, y };
+    let _wall = null;
 
     this.canvas.walls.forEach((wall) => {
       const wallEndOrigin = {
@@ -39,19 +49,32 @@ class FurnitureMode extends Mode {
       };
 
       const vectorDot = Vector.dot(vecOrigin, wallEndOrigin);
-      const ln = Vector.vectorLn(wallEndOrigin);
+      const ln = Vector.squaredLength(wallEndOrigin);
+
       const projection = Vector.multiplyScalar(wallEndOrigin, vectorDot / ln);
-
       const rejection = Vector.sub(vecOrigin, projection);
-
       const distance = Vector.vectorLn(rejection);
 
       if (distance < lowestDistance) {
         lowestDistance = distance;
+        pos = { ...Vector.add(projection, wall.start) };
+        _wall = wall;
       }
-      // console.log("distance", distance);
     });
 
-    return lowestDistance < 16;
+    return lowestDistance < 16 ? { position: pos, wall: _wall } : null;
+  }
+
+  drawCircle(x, y) {
+    const ctx = this.canvas.ctx;
+    console.log(x, y);
+    const centerX = x;
+    const centerY = y;
+    const radius = 15;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    ctx.fillStyle = "purple";
+    ctx.fill();
+    ctx.stroke();
   }
 }
