@@ -18,14 +18,24 @@ class FurnitureMode extends Mode {
 
     if (wallSnap) {
       const { position, wall } = wallSnap;
-      this.canvas.sofa.position = { ...position };
+
       const origin = {
         x: wall.start.x - wall.end.x,
         y: wall.start.y - wall.end.y,
       };
 
       const angle = Math.atan2(origin.y, origin.x);
-      this.canvas.sofa.rotation = angle;
+
+      const offset = {
+        x: 0,
+        y: this.canvas.sofa?.dimension?.height / 2,
+      };
+
+      this.canvas.sofa.position = {
+        ...Vector.add(position, Vector.rotate(offset, angle + Math.PI)),
+      };
+
+      this.canvas.sofa.rotation = angle + Math.PI;
     } else {
       this.canvas.sofa.position = { x, y };
       this.canvas.sofa.rotation = 0;
@@ -55,7 +65,17 @@ class FurnitureMode extends Mode {
       const rejection = Vector.sub(vecOrigin, projection);
       const distance = Vector.vectorLn(rejection);
 
-      if (distance < lowestDistance) {
+      // const t = posToOrigin.dot(toOrigin) / toOrigin.lengthSq();
+      const t =
+        Vector.dot(vecOrigin, wallEndOrigin) /
+        Vector.squaredLength(wallEndOrigin);
+
+      if (
+        distance < lowestDistance &&
+        t >= 0 &&
+        t <= 1 &&
+        Vector.vectorLn(projection) < Vector.vectorLn(wallEndOrigin)
+      ) {
         lowestDistance = distance;
         pos = { ...Vector.add(projection, wall.start) };
         _wall = wall;

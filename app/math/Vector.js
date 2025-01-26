@@ -31,4 +31,16 @@ class Vector {
   static add(a, b) {
     return { x: a.x + b.x, y: a.y + b.y };
   }
+
+  static rotate(a, rad) {
+    const cosAngle = Math.cos(rad);
+    const sinAngle = Math.sin(rad);
+
+    const { x, y } = a;
+
+    const xPrime = x * cosAngle - y * sinAngle;
+    const yPrime = x * sinAngle + y * cosAngle;
+
+    return { x: xPrime, y: yPrime };
+  }
 }

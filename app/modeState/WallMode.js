@@ -59,9 +59,12 @@ class WallMode extends Mode {
         const corner = this.canvas.corners.find((c) => c.uuid === cornerUUID);
         if (corner) newRoom.corners.push(corner);
         this.canvas.roomDetected = true;
-        this.canvas.walls.pop();
         this.canvas.rooms.push(newRoom);
       });
+
+      if (this.canvas.roomDetected) {
+        this.canvas.walls.pop();
+      }
     }
   }
 
