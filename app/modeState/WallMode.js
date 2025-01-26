@@ -1,6 +1,7 @@
 class WallMode extends Mode {
   canvas;
   active;
+  graph = new Graph();
 
   constructor(canvas) {
     super();
@@ -105,30 +106,9 @@ class WallMode extends Mode {
   }
 
   checkForRoom() {
-    let startVisited = 0;
+    this.graph.update(this.canvas.walls);
+    const hasCycle = this.graph.hasCycle();
 
-    const dfs = (vertex, visitedEnds = {}) => {
-      visitedEnds[vertex.uuid] = true;
-
-      const neighbors = [];
-
-      vertex.connections?.forEach((connection) => {
-        const oppositeEnd = connection.getOpposite();
-
-        if (oppositeEnd) {
-          neighbors.push(oppositeEnd);
-        }
-      });
-
-      for (const neighbor of neighbors) {
-        if (!visited[neighbor.uuid]) {
-          this.dfs(neighbor, visited);
-        }
-      }
-    };
-
-    const startPos = this.canvas.walls[0];
-    const res = dfs(startPos);
-    if (res) dfs(this.canvas.walls[0].end);
+    return hasCycle();
   }
 }
